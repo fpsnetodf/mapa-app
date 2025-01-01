@@ -4,7 +4,7 @@ import L from 'leaflet';
 
 import users from '../data/users'; // Supondo que 'users' já esteja carregado corretamente
 
-const HomePage5 = () => {
+const HomePage7 = () => {
   const [nome, setNome] = useState('');
   const [telefone, setTelefone] = useState('');
   const [profissao, setProfissao] = useState('');
@@ -31,33 +31,15 @@ const HomePage5 = () => {
     );
   };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    if (!location.latitude || !location.longitude) {
-      alert('Por favor, obtenha a localização antes de cadastrar.');
-      return;
-    }
-
-    const newUser = {
-      id: users.length + 1, // Apenas para simulação
-      nome,
-      telefone,
-      profissao,
-      latitude: location.latitude,
-      longitude: location.longitude,
-    };
-
-    users.push(newUser); // Simulação de adição ao banco de dados
-    setFilteredUsers(users); // Atualiza a lista filtrada
-    alert('Usuário cadastrado com sucesso!');
-  };
+  useEffect(() => {
+    getLocation(); // Obter a localização quando o componente é montado
+  }, []);
 
   useEffect(() => {
     const result = users.filter(user =>
       user.profissao.toLowerCase().includes(filter.toLowerCase())
     );
     setFilteredUsers(result);
-    getLocation(); // Obter a localização quando o componente é montado
   }, [filter]);
 
   // Definindo ícone customizado
@@ -70,7 +52,7 @@ const HomePage5 = () => {
   return (
     <div>
       <div className="my-5">
-        <MapContainer center={mapCenter} zoom={15} style={{ height: '500px', width: '100%' }}>
+        <MapContainer center={mapCenter} zoom={13} style={{ height: '500px', width: '100%' }}>
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution="&copy; OpenStreetMap contributors"
@@ -127,4 +109,4 @@ const HomePage5 = () => {
   );
 };
 
-export default HomePage5;
+export default HomePage7;
