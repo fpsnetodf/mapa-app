@@ -1,10 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
-import Navbar2 from './components/Navbar2';
+import NavBar3 from './components/NavBar3';
+
 import Map from './components/Map';
 import HomePage2 from './pages/HomePage2';
-import CadastroPage3 from './pages/CadastroPage3';
+import CadastroForm from './pages/CadastroForm';
 import UsuariosPage from './pages/UsuariosPage';
 import ServicesPage from './pages/ServicesPage';
 // import ServiceDetailPage from './pages/ServiceDetailPage';
@@ -32,7 +33,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Navbar2 />
+        <NavBar3 />
         {/* Passando setFilteredUsers corretamente como prop para SearchBar */}
         {/* <SearchBar users={users} setFilteredUsers={setFilteredUsers} /> */}
         {/* Passando filteredUsers e userLocation como props para Map */}
@@ -41,7 +42,7 @@ function App() {
 
       <Routes>
         <Route path="/" element={<HomePage2 />} />
-        <Route path="/cadastro" element={<CadastroPage3 />} />
+        <Route path="/cadastro" element={<CadastroForm />} />
         <Route path="/usuarios" element={<UsuariosPage />} />
         {/* <Route path="/servico/:serviceName" element={<ServiceDetailPage />} /> */}
       </Routes>
