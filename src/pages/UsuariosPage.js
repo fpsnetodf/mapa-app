@@ -70,7 +70,7 @@ const customIcon = new L.Icon({
 
 const UsuariosPage = () => {
   return (
-    <div className='rounded-full m-5'>
+    <div className='rounded-full mx-2 my-5'>
       <h1 className='text-center text-violet-500 my-8'>Usuários no Mapa</h1>
       <MapContainer 
         center={[-23.55, -46.63]} // Posição inicial do mapa (São Paulo)

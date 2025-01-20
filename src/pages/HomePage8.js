@@ -63,7 +63,7 @@ const HomePage8 = () => {
 
   return (
     <div>
-      <div className="my-5">
+      <div className="my-5 mx-2">
         {location.latitude && location.longitude ? (
           <MapContainer center={[location.latitude, location.longitude]} zoom={13} style={{ height: '500px', width: '100%' }}>
             <SetMapCenter center={[location.latitude, location.longitude]} />

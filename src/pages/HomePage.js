@@ -1,108 +1,147 @@
-// src/pages/HomePage.js
-
-// import React, { useEffect, useState } from 'react';
-// import { MapContainer, TileLayer, Marker, Popup, Circle } from 'react-leaflet';
-// import 'leaflet/dist/leaflet.css';
-
-// const HomePage = () => {
-//   const [location, setLocation] = useState({ lat: null, lon: null });
-
-//   // Função para pegar a localização do usuário
-//   useEffect(() => {
-//     if (navigator.geolocation) {
-//       navigator.geolocation.getCurrentPosition((position) => {
-//         setLocation({
-//           lat: position.coords.latitude,
-//           lon: position.coords.longitude,
-//         });
-//       });
-//     } else {
-//       alert('Geolocalização não suportada!');
-//     }
-//   }, []);
-
-//   // Quando a localização do usuário for obtida, renderiza o mapa
-//   if (!location.lat || !location.lon) {
-//     return <div>Carregando mapa...</div>;
-//   }
-
-//   return (
-//     <div>
-//       <h1 className='text-violet-500 text-2xl text-center hover:rotate-12 my-10'>Página Inicial</h1>
-//       <MapContainer
-//         center={[location.lat, location.lon]}
-//         zoom={19}  // Definindo zoom diretamente
-//         style={{ height: '800px', width: '100%' }}
-//       >
-//         <TileLayer
-//           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-//         />
-//         <Marker position={[location.lat, location.lon]}>
-//           <Popup>
-//             Você está aqui: {location.lat}, {location.lon}
-//           </Popup>
-//         </Marker>
-//         <Circle
-//           center={[location.lat, location.lon]}
-//           radius={100} // Raio de 100 metros
-//           color="blue"
-//           fillColor="blue"
-//           fillOpacity={0.2}
-//         />
-//       </MapContainer>
-//     </div>
-//   );
-// };
-
-// export default HomePage;
-
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Circle } from 'react-leaflet';
-import users from '../data/users'; // Importando os usuários fictícios
+import { MapContainer, TileLayer, Marker, Popup, Circle, useMap } from 'react-leaflet';
+import L from 'leaflet';
 
-const HomePage2 = () => {
-  const [userLocation, setUserLocation] = useState(null);
+import users from '../data/users'; // Atualize o caminho aqui
 
-  useEffect(() => {
+const HomePage8 = () => {
+  const [nome, setNome] = useState('');
+  const [telefone, setTelefone] = useState('');
+  const [profissao, setProfissao] = useState('');
+  const [location, setLocation] = useState({ latitude: null, longitude: null });
+  const [filter, setFilter] = useState('');
+  const [filteredUsers, setFilteredUsers] = useState(users);
+
+  // Função para obter a localização do usuário
+  const getLocation = () => {
     navigator.geolocation.getCurrentPosition(
       (position) => {
-        setUserLocation({
-          lat: position.coords.latitude,
-          lng: position.coords.longitude,
-        });
+        const newLocation = {
+          latitude: position.coords.latitude,
+          longitude: position.coords.longitude,
+        };
+        setLocation(newLocation);
+        console.log('Localização obtida:', newLocation);
       },
       (error) => {
-        console.error("Error fetching user location:", error);
-        setUserLocation({ lat: -23.5505, lng: -46.6333 }); // Localização padrão: São Paulo
+        console.error('Erro ao obter localização:', error);
+        alert('Erro ao obter localização');
       }
     );
+  };
+
+  // Chamar getLocation ao montar o componente para obter a localização do usuário
+  useEffect(() => {
+    getLocation();
   }, []);
+
+  // Atualizar a lista de usuários filtrados conforme o filtro de profissão
+  useEffect(() => {
+    const result = users.filter(user =>
+      user.profissao.toLowerCase().includes(filter.toLowerCase())
+    );
+    setFilteredUsers(result);
+  }, [filter]);
+
+  // Definindo ícone customizado para os marcadores
+  const customIcon = L.icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+    iconSize: [25, 41],
+    iconAnchor: [12, 41],
+  });
+
+  // Componente para centralizar o mapa na localização do usuário
+  const SetMapCenter = ({ center }) => {
+    const map = useMap();
+    useEffect(() => {
+      if (center) {
+        map.setView(center);
+      }
+    }, [center, map]);
+    return null;
+  };
+
+  // Função para lidar com o clique no resultado filtrado
+  const handleFilterClick = (profissao) => {
+    setFilter(profissao);
+  };
 
   return (
     <div>
-      {userLocation ? (
-        <MapContainer center={userLocation} zoom={15} style={{ height: "500px", width: "100%" }}>
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution="&copy; OpenStreetMap contributors"
-          />
-          {/* Marcador do usuário */}
-          <Marker position={userLocation}>
-            <Circle center={userLocation} radius={200} />
-          </Marker>
-
-          {/* Marcadores dos usuários fictícios */}
-          {users.map((user) => (
-            <Marker key={user.id} position={[user.lat, user.lng]}>
-              <Circle center={[user.lat, user.lng]} radius={600} />
+      <div className="my-5 mx-2">
+        {location.latitude && location.longitude ? (
+          <MapContainer center={[location.latitude, location.longitude]} zoom={13} style={{ height: '500px', width: '100%' }}>
+            <SetMapCenter center={[location.latitude, location.longitude]} />
+            <TileLayer
+              url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+              attribution="&copy; OpenStreetMap contributors"
+            />
+            <Marker
+              position={[location.latitude, location.longitude]}
+              icon={customIcon}
+            >
+              <Popup>
+                <strong>Estou aqui</strong><br />
+                Latitude: {location.latitude}<br />
+                Longitude: {location.longitude}
+              </Popup>
             </Marker>
-          ))}
-        </MapContainer>
-      ) : (
-        <p>Carregando mapa...</p>
-      )}
+            <Circle 
+              center={[location.latitude, location.longitude]} 
+              radius={400}
+            >
+              <Popup>
+                <strong>Estou aqui</strong><br />
+                Latitude: {location.latitude}<br />
+                Longitude: {location.longitude}
+              </Popup>
+            </Circle>
+            {filteredUsers.map(user => (
+              <Marker
+                key={user.id}
+                position={[user.latitude, user.longitude]}
+                icon={customIcon}
+              >
+                <Popup>
+                  <strong>{user.nome}</strong><br />
+                  Profissão: {user.profissao}<br />
+                  Telefone: {user.telefone}
+                </Popup>
+              </Marker>
+            ))}
+          </MapContainer>
+        ) : (
+          <p>Obtendo localização...</p>
+        )}
+        <h2 className="text-center text-slate-700">Buscar por Profissão</h2>
+        <input
+          className="rounded-lg w-full border-2 hover:border-sky-400 p-2"
+          type="text"
+          placeholder="Digite uma profissão para filtrar"
+          value={filter}
+          onChange={(e) => setFilter(e.target.value)}
+        />
+        <div className="mt-3">
+          <ul className="list-none">
+            {filteredUsers.length > 0 ? (
+              filteredUsers.map(user => (
+                <li key={user.id} className="py-1">
+                  <span
+                    className="cursor-pointer text-blue-500 hover:underline"
+                    onClick={() => handleFilterClick(user.profissao)}
+                  >
+                    {user.profissao}
+                  </span>
+                </li>
+              ))
+            ) : (
+              <li>Nenhuma profissão encontrada.</li>
+            )}
+          </ul>
+        </div>
+      </div>
     </div>
   );
 };
 
-export default HomePage2;
+export default HomePage8;

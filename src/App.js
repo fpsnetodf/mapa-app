@@ -1,15 +1,16 @@
 import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
-import Navbar from './components/Navbar';
+import Navbar2 from './components/Navbar2';
 import Map from './components/Map';
-import HomePage8 from './pages/HomePage8';
+import HomePage from './pages/HomePage';
 import CadastroPage3 from './pages/CadastroPage3';
 import UsuariosPage from './pages/UsuariosPage';
 import ServicesPage from './pages/ServicesPage';
 // import ServiceDetailPage from './pages/ServiceDetailPage';
 import SearchBar from './components/SearchBar';
 import users from './data/users';
+
 
 function App() {
   // Definindo o estado dos usuários filtrados
@@ -31,7 +32,7 @@ function App() {
   return (
     <Router>
       <div>
-        <Navbar />
+        <Navbar2 />
         {/* Passando setFilteredUsers corretamente como prop para SearchBar */}
         {/* <SearchBar users={users} setFilteredUsers={setFilteredUsers} /> */}
         {/* Passando filteredUsers e userLocation como props para Map */}
@@ -39,7 +40,7 @@ function App() {
       </div>
 
       <Routes>
-        <Route path="/" element={<HomePage8 />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/cadastro" element={<CadastroPage3 />} />
         <Route path="/usuarios" element={<UsuariosPage />} />
         {/* <Route path="/servico/:serviceName" element={<ServiceDetailPage />} /> */}
