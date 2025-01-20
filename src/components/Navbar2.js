@@ -10,7 +10,7 @@ const Navbar2 = () => {
   };
 
   return (
-    <nav className="bg-blue-500 px-4 py-2">
+    <nav className="bg-slate-600 px-4 py-2">
       <div className="flex items-center justify-between h-16">
         <div className="text-white text-2xl font-bold">
             <img src={ConectaProLogo} alt="ConectaPro Logo" className="h-12 rounded-sm" />
