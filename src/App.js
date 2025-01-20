@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import './index.css';
 import Navbar2 from './components/Navbar2';
 import Map from './components/Map';
-import HomePage from './pages/HomePage';
+import HomePage2 from './pages/HomePage2';
 import CadastroPage3 from './pages/CadastroPage3';
 import UsuariosPage from './pages/UsuariosPage';
 import ServicesPage from './pages/ServicesPage';
@@ -40,7 +40,7 @@ function App() {
       </div>
 
       <Routes>
-        <Route path="/" element={<HomePage />} />
+        <Route path="/" element={<HomePage2 />} />
         <Route path="/cadastro" element={<CadastroPage3 />} />
         <Route path="/usuarios" element={<UsuariosPage />} />
         {/* <Route path="/servico/:serviceName" element={<ServiceDetailPage />} /> */}
